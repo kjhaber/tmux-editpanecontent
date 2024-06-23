@@ -3,6 +3,8 @@
 # Captures current tmux pane content (including all scrollback history) to temp
 # file, then opens the temp file with $EDITOR in a new horizontal split pane.
 
+set -e
+
 # Find current tmux pane id
 # Note: Using plain TMUX_PANE env var doesn't seem to work herewhen triggered
 # by tmux key binding
@@ -25,6 +27,6 @@ tmux capture-pane -p -t "$TMUX_PANE_ID" -S - > "$TMPFILE"
 
 # Open pane content tmp file in editor within horizontal split of current tmux
 # pane
-EDIT_CMD="$EDITOR '$TMPFILE'" tmux split-window -h -t "$TMUX_PANE_ID"
-"$EDIT_CMD; rm '$TMPFILE'"
+EDIT_CMD="$EDITOR '$TMPFILE'"
+tmux split-window -h -t "$TMUX_PANE_ID" "$EDIT_CMD; rm '$TMPFILE'"
 
