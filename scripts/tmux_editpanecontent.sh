@@ -28,5 +28,11 @@ tmux capture-pane -p -t "$TMUX_PANE_ID" -S - > "$TMPFILE"
 # Open pane content tmp file in editor within horizontal split of current tmux
 # pane
 EDIT_CMD="$EDITOR '$TMPFILE'"
+
+# If editor is vim, move cursor to end of file on opening
+if [[ "$EDITOR" =~ 'vim' ]]; then
+  EDIT_CMD="$EDIT_CMD -c 'normal G'"
+fi
+
 tmux split-window -h -t "$TMUX_PANE_ID" "$EDIT_CMD; rm '$TMPFILE'"
 
